@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/1017868548.svg)](https://doi.org/10.5281/zenodo.15862292)
 ![](./README_files/img/fig0.png)
 
 # InferBlock: A Visual Meta-Programming Framework for Divisible and Transparent Data Analysis Pipelines
