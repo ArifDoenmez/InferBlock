@@ -1,2 +1,3 @@
-# InferBlock
-InferBlock
+# InferBlock: A Visual Meta-Programming Framework for Divisible and Transparent Data Analysis Pipelines
+
+InferBlock ...
