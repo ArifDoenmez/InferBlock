@@ -1,0 +1,20 @@
+       /* All CSS remains the same, only the navigation links are updated */
+        @font-face {
+                        font-family: 'FiraCode'; 
+                        src: url('../font/FiraCode-Regular.ttf');
+                        font-weight: normal;
+                        font-style: normal;
+        }
+
+
+        @font-face {
+                        font-family: 'FiraCode'; 
+                        src: url('../font/FiraCode-Bold.ttf');
+                        font-weight: bold;
+                        font-style: normal;
+        }
+
+        *{
+
+              font-family: FiraCode;
+        }
