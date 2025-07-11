@@ -1,3 +1,5 @@
+![](./README_files/img/fig0.png)
+
 # InferBlock: A Visual Meta-Programming Framework for Divisible and Transparent Data Analysis Pipelines
 
 
