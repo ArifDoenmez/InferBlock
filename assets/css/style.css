@@ -32,4 +32,64 @@
               margin: auto;
        }
 
+
+/* General Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2em 0; /* Provides vertical space between tables and other content */
+  color: #333;
+  font-size: 0.95em;
+  background-color: #ffffff;
+  border: 1px solid #000000; /* Strong black border for the entire table */
+}
+
+/* Table Caption Styling */
+caption {
+  caption-side: top;
+  text-align: left;
+  font-weight: bold;
+  font-size: 1.1em;
+  padding: 0.5em 0;
+  color: #000000;
+}
+
+/* Table Header Styling */
+thead th {
+  background-color: #ffde17; /* Bauhaus Yellow Accent */
+  color: #000000;
+  font-weight: bold;
+  padding: 15px;
+  text-align: center;
+  border-bottom: 2px solid #000000; /* Strong separator for the header */
+}
+
+/* Table Body Styling */
+tbody th,
+tbody td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #dddddd; /* Thin lines for data rows */
+  text-align: left;
+}
+
+/* Zebra-striping for improved readability */
+tbody tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+
+/* Remove bottom border from the last row in the body */
+tbody tr:last-child th,
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Table Footer Styling */
+tfoot td {
+  font-weight: bold;
+  padding: 12px 15px;
+  background-color: #f5f5f5;
+  border-top: 2px solid #000000; /* Strong separator for the footer */
+}
+
+
        
