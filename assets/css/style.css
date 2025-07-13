@@ -95,7 +95,17 @@ tfoot td {
        * {
               padding:6px;
        }
+
+       table {
+           display: grid;
+       }
+       
+       tr {
+           display: contents;
+       }       
 }
 
+@media (max-width: 600px) {
 
+}
        
