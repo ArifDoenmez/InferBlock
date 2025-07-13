@@ -158,3 +158,122 @@ The final output, contains the intermediate column, making the calculation compl
 | **Reproducibility** | Relies on manual steps that are hard to document and repeat reliably. | The visual is a perfect, repeatable recipe for the entire transformation. |
 
 This step-by-step method within a single visual nested block is often the best of all worlds for collaborative work. It is powerful and reproducible and its explicit, sequential logic from the innermost block outwards makes it exceptionally easy for colleagues to read, understand, and trust the process.
+
+---
+
+### Bechmark Response (BMR) Level 
+#### The Scenario: Estimating BMR level for ToxCast data
+
+At a high level, this section is designed to process a large dataset from ToxCast database. Its specific goal is to:
+
+1.  Isolate the data for **one single assay** named "CCTE_Mundy_HCI_Cortical_NOG_NeuriteLength".
+2.  Clean the data by removing low-quality measurements.
+3.  Perform a **first normalization** to convert raw activity values into a percentage relative to the on-plate negative controls.
+4.  Perform a **second normalization** to set the activity at the lowest tested concentration of each chemical as the 100% baseline.
+
+This entire process transforms raw instrument readings into a clean, normalized dataset ready for concentration-response analysis for that specific neurite length assay.
+
+### Step-by-Step Block Explanation
+
+Here is a line-by-line breakdown of what each block does and why it's important.
+
+#### **Step 1: Reading the Data**
+
+![](./README_files/img/a1.png)
+
+*   **What it Does:** This command reads the Excel file named `"ToxCastTutorial.xlsx"`, specifically from the sheet named `"Tabelle1"`, and loads all of its contents ready to pass this entire table to the next block.
+*   **Why it's Done:** This is the starting point. It gets the raw data from the Excel file into the InferBlock environment so the analysis can begin.
+
+---
+
+#### **Step 2: Filtering for a Specific Assay**
+
+![](./README_files/img/a2.png)
+
+
+*   **What it Does:** This is a critical filtering step. It goes through the entire table and keeps **only the rows** where the value in the **`acnm`** (assay component name) column exactly matches `"CCTE_Mundy_HCI_Cortical_NOG_NeuriteLength"`. All other rows are discarded.
+*   **Why it's Done:** A raw data file from ToxCast often contains results from dozens or hundreds of different biological assays. This command immediately focuses the entire analysis on the single experiment you care about—in this case, an assay measuring the effect of chemicals on neurite length.
+
+---
+
+#### **Step 3: Filtering for High-Quality Wells**
+
+![](./README_files/img/a3.png)
+
+*   **What it Does:** From the remaining data (which is now only from the one neurite length assay), this command keeps *only the rows where the **`wllq`** (well quality) column has a value of `1`.
+*   **Why it's Done:** High-throughput screening systems perform automated quality control on each well of a plate. A `wllq` of `1` typically signifies a valid, high-quality measurement. Any wells flagged with errors (e.g., `wllq = 0`) are removed to ensure the analysis is based on reliable data.
+
+---
+
+#### **Step 4: Grouping by Plate**
+
+![](./README_files/img/a4.png)
+
+*   **What it Does:** This block doesn't change the data's appearance but adds "invisible labels" that group the rows based on their shared value in the **`apid`** (assay plate ID) column. All calculations in the following steps will be performed separately within each of these plate groups.
+*   **Why it's Done:** Experimental conditions can vary slightly between different physical plates. Grouping by `apid` ensures that when you normalize data, each well is only compared to control wells from the *exact same plate*, which is essential for accurate scientific results.
+
+---
+
+#### **Step 5: Calculating the Control Mean for Each Plate**
+
+![](./README_files/img/a5.png)
+
+*   **What it Does:** This creates a new column named **`ctl_mean`**. For each plate group, it calculates the average (`mean`) of the values in the **`rval`** (raw value) column, but only from rows where the **`wllt`** (well type) is `"n"` (likely for "negative control"). This single calculated value is then added to every row belonging to that plate.
+*   **Why it's Done:** This establishes the baseline or "zero effect" level for each plate by averaging the signal from its negative control wells. This value is the foundation for the first normalization.
+
+---
+
+#### **Step 6: Normalizing Raw Values to Controls**
+
+![](./README_files/img/a6.png)
+
+*   **What it Does:** This creates another new column, **`rval_normalized`**. For each row, it calculates a new value by taking its **`rval`**, dividing it by the plate-specific **`ctl_mean`**, and multiplying by 100.
+*   **Why it's Done:** This converts the raw, arbitrary fluorescence or imaging units into an intuitive "percent of control activity". A value of `90` means the neurite length in that well was 90% of the average control length. This makes results comparable across different plates.
+
+---
+
+#### **Step 7: Removing Rows with No Chemical Name**
+
+![](./README_files/img/a7.png)
+
+
+*   **What it Does:** This filters the data again, keeping only the rows where the **`chnm`** (chemical name) column is *not* empty (`!is.na` means "is not NA").
+*   **Why it's Done:** At this point, the control wells have served their purpose for the first normalization. This step removes them (as they don't have a chemical name) and any other data points missing a chemical identifier, leaving only the data for wells treated with a specific chemical.
+
+---
+
+#### **Step 8: Re-Grouping by Chemical and Plate**
+
+![](./README_files/img/a8.png)
+
+*   **What it Does:** This command updates the grouping. All subsequent steps will now be performed on data grouped by each unique combination of **`chnm`** (chemical name) and **`apid`** (assay plate ID).
+*   **Why it's Done:** The focus of the analysis now shifts to the behavior of each individual chemical on a specific plate.
+
+---
+
+#### **Step 9 & 10: Finding and Keeping Only the Lowest Concentration Data**
+
+![](./README_files/img/a9.png)
+
+*   **What it Does:** This is a two-step maneuver to isolate a specific set of data.
+    1.  `MUTATE`: First, for each chemical-plate group, it finds the lowest (`min`) value in the **`conc`** (concentration) column and puts that value in a new temporary column called `min_conc`.
+    2.  `FILTER`: Second, it throws away all rows *except* those where the concentration (`conc`) is the same as the minimum concentration (`min_conc`).
+*   **Why it's Done:** This is a clever way to isolate the data points for the starting concentration of each chemical's dose-response curve. This "baseline activity" for the chemical itself will be used for the second round of normalization.
+
+---
+
+#### **Step 11, 12, & 13: The Second Normalization**
+
+![](./README_files/img/a10.png)
+
+
+*   **What it Does:** This is the final calculation.
+    1.  `GROUP_BY`: This re-establishes the grouping (this is often done for clarity, even if the grouping is already active).
+    2.  `MUTATE`: It calculates the average of the `rval_normalized` values (which are all from the lowest concentration) and puts this average in a new column, **`rval_normalized_mean`**.
+    3.  `MUTATE`: Finally, it creates the ultimate output column, **`rval_fin`**. It takes the normalized value and divides it by the average normalized value at that lowest concentration, multiplying by 100.
+*   **Why it's Done:** This second normalization sets the activity measured at the *lowest concentration of the chemical* to be the new 100% baseline.
+
+
+From the resulting data distribution induced by the normalized activities at the lowest concentration of chemicals we deduce the BMR.
+
+This entire chain of blocks is a powerful, clear, and reproducible recipe for a complex data transformation that would be a nightmare to perform manually in Excel.
