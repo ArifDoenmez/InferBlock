@@ -134,7 +134,7 @@ Let's trace the data through this pipe step-by-step:
 
 The final output, contains the intermediate column, making the calculation completely transparent.
 
-| x | y | group | control_mean | y_normalized |
+| x | y | group | ctl_mean | y_normalized |
 |---|---|---|---|---|
 | 1 | 10 | ctl | 11 | 0.909 |
 | 2 | 12 | ctl | 11 | 1.091 |
