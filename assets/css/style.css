@@ -35,7 +35,7 @@
 
 /* General Table Styling */
 table {
-  width: 100%;
+  /* width: 100%; */
   border-collapse: collapse;
   margin: 2em 0; /* Provides vertical space between tables and other content */
   color: #333;
@@ -95,10 +95,6 @@ tfoot td {
        * {
               padding:6px;
        }
-       table {
-              width: 100vh;
-       }
-
 }
 
 
