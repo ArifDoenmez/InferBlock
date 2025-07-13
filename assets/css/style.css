@@ -97,41 +97,25 @@ tfoot td {
        }
 }
 
+/* --- Styles for Smaller Screens --- */
 @media screen and (max-width: 768px) {
-
-       
-  /* Hide the header like in the previous example */
-  thead {
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
-  }
-  
-  /* Turn the row into a grid container */
-  tr {
-    display: grid;
-    grid-template-columns: 1fr 2fr; /* Example: 2 columns, label and value */
-    grid-gap: 10px;
-    margin-bottom: 1rem;
-    padding: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  table {
+    font-size: 14px; /* Reduce font size */
   }
 
-  /* Each cell becomes a grid item */
-  td {
-    display: contents; /* This time it's useful! */
+  th, td {
+    padding: 8px 10px; /* Reduce padding in cells */
+    white-space: normal; /* Allow text to wrap within cells */
   }
-  
-  /* Use the ::before pseudo-element for the label */
-  td::before {
-    content: attr(data-label);
-    font-weight: bold;
-    padding-right: 10px;
-    text-align: right;
+}
+
+/* --- Even Smaller Screens (Optional) --- */
+@media screen and (max-width: 480px) {
+  table {
+    font-size: 12px; /* Further reduce font size */
+  }
+
+  th, td {
+    padding: 5px; /* Make padding even smaller */
   }
 }
