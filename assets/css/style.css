@@ -91,5 +91,13 @@ tfoot td {
   border-top: 2px solid #000000; /* Strong separator for the footer */
 }
 
+@media (max-width:768px){
+       * {
+              width: 100vh;
+              padding:6px;
+       }
+
+}
+
 
        
