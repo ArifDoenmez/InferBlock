@@ -192,7 +192,7 @@ Here is a line-by-line breakdown of what each block does and why it's important.
 
 
 *   **What it Does:** This is a critical filtering step. It goes through the entire table and keeps **only the rows** where the value in the **`acnm`** (assay component name) column exactly matches `"CCTE_Mundy_HCI_Cortical_NOG_NeuriteLength"`. All other rows are discarded.
-*   **Why it's Done:** A raw data file from ToxCast often contains results from dozens or hundreds of different biological assays. This command immediately focuses the entire analysis on the single experiment you care about—in this case, an assay measuring the effect of chemicals on neurite length.
+*   **Why it's Done:** A raw data file from ToxCast often contains results from dozens or hundreds of different biological assays. This command immediately focuses the entire analysis on the single assay you care about—in this case, an assay measuring the effect of chemicals on neurite length.
 
 ---
 
